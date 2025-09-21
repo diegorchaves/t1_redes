@@ -102,7 +102,12 @@ control MyIngress(inout headers hdr,
     }
 
     action decrease_ttl() {
-	hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+	if (hdr.ipv4.ttl > 1) {
+	    hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+	} else {
+	    drop();
+	    return();
+	}
     }
 
     table ipv4_lpm {
