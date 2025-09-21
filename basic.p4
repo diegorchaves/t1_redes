@@ -120,9 +120,17 @@ control MyIngress(inout headers hdr,
 
     apply {
         if (hdr.ipv4.isValid()) {
-            if (hdr.ipv4.protocol == 1) { mark_dscp(); }		// ICMP
-	    else if (hdr.ipv4.protocol == 6) { drop(); return; }	// TCP
-	    else if (hdr.ipv4.protocol == 17) { decrease_ttl(); }	// UDP
+            if (hdr.ipv4.protocol == 1) {
+		//ICMP
+		mark_dscp();
+	    } else if (hdr.ipv4.protocol == 6) {
+		 //TCP
+		 drop();
+		 return;
+	    } else if (hdr.ipv4.protocol == 17) {
+		 //UDP
+		 decrease_ttl();
+	    }
 
 	    ipv4_lpm.apply();
         }
