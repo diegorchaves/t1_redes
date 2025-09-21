@@ -95,7 +95,14 @@ control MyIngress(inout headers hdr,
         standard_metadata.egress_spec = port;
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
-        hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+    }
+
+    action mark_dscp() {
+	hdr.ipv4.diffserv = 46;
+    }
+
+    action decrease_ttl() {
+	hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
     table ipv4_lpm {
@@ -113,7 +120,11 @@ control MyIngress(inout headers hdr,
 
     apply {
         if (hdr.ipv4.isValid()) {
-            ipv4_lpm.apply();
+            if (hdr.ipv4.protocol == 1) { mark_dscp(); }		// ICMP
+	    else if (hdr.ipv4.protocol == 6) { drop(); return; }	// TCP
+	    else if (hdr.ipv4.protocol == 17) { decrease_ttl(); }	// UDP
+
+	    ipv4_lpm.apply();
         }
     }
 }

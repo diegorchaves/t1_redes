@@ -62,5 +62,19 @@ actions {
     bitwidth: 9
   }
 }
+actions {
+  preamble {
+    id: 18755093
+    name: "MyIngress.mark_dscp"
+    alias: "mark_dscp"
+  }
+}
+actions {
+  preamble {
+    id: 28348867
+    name: "MyIngress.decrease_ttl"
+    alias: "decrease_ttl"
+  }
+}
 type_info {
 }
