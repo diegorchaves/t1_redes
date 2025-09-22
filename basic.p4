@@ -98,7 +98,7 @@ control MyIngress(inout headers hdr,
     }
 
     action mark_dscp() {
-	hdr.ipv4.diffserv = 46;
+	hdr.ipv4.diffserv = 46 << 2;
     }
 
     action decrease_ttl() {
@@ -106,7 +106,7 @@ control MyIngress(inout headers hdr,
 	    hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
 	} else {
 	    drop();
-	    return();
+	    return;
 	}
     }
 

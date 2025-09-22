@@ -4,7 +4,7 @@
       "name" : "scalars_0",
       "id" : 0,
       "fields" : [
-        ["hasReturned", 1, false],
+        ["hasReturned_0", 1, false],
         ["_padding_0", 7, false]
       ]
     },
@@ -179,7 +179,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "basic.p4",
-        "line" : 170,
+        "line" : 183,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -196,7 +196,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "basic.p4",
-        "line" : 148,
+        "line" : 161,
         "column" : 8,
         "source_fragment" : "update_checksum( ..."
       },
@@ -388,14 +388,14 @@
             },
             {
               "type" : "hexstr",
-              "value" : "0x2e"
+              "value" : "0xb8"
             }
           ],
           "source_info" : {
             "filename" : "basic.p4",
             "line" : 101,
             "column" : 1,
-            "source_fragment" : "hdr.ipv4.diffserv = 46"
+            "source_fragment" : "hdr.ipv4.diffserv = 46 << 2"
           }
         }
       ]
@@ -405,6 +405,45 @@
       "id" : 5,
       "runtime_data" : [],
       "primitives" : [
+        {
+          "op" : "_jump_if_zero",
+          "source_info" : {
+            "filename" : "basic.p4",
+            "line" : 105,
+            "column" : 1,
+            "source_fragment" : "if"
+          },
+          "parameters" : [
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "b2d",
+                  "left" : null,
+                  "right" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : ">",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["ipv4", "ttl"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x01"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x3"
+            }
+          ]
+        },
         {
           "op" : "assign",
           "parameters" : [
@@ -442,15 +481,45 @@
           ],
           "source_info" : {
             "filename" : "basic.p4",
+            "line" : 106,
+            "column" : 5,
+            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
+          }
+        },
+        {
+          "op" : "_jump",
+          "source_info" : {
+            "filename" : "basic.p4",
             "line" : 105,
             "column" : 1,
-            "source_fragment" : "hdr.ipv4.ttl = hdr.ipv4.ttl - 1"
+            "source_fragment" : "if"
+          },
+          "parameters" : [
+            {
+              "type" : "hexstr",
+              "value" : "0x4"
+            }
+          ]
+        },
+        {
+          "op" : "mark_to_drop",
+          "parameters" : [
+            {
+              "type" : "header",
+              "value" : "standard_metadata"
+            }
+          ],
+          "source_info" : {
+            "filename" : "basic.p4",
+            "line" : 91,
+            "column" : 8,
+            "source_fragment" : "mark_to_drop(standard_metadata)"
           }
         }
       ]
     },
     {
-      "name" : "basic124",
+      "name" : "basic134",
       "id" : 6,
       "runtime_data" : [],
       "primitives" : [
@@ -459,7 +528,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "hasReturned"]
+              "value" : ["scalars", "hasReturned_0"]
             },
             {
               "type" : "expression",
@@ -478,8 +547,8 @@
           ],
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 124,
-            "column" : 48,
+            "line" : 134,
+            "column" : 3,
             "source_fragment" : "return"
           }
         }
@@ -495,7 +564,7 @@
           "parameters" : [
             {
               "type" : "field",
-              "value" : ["scalars", "hasReturned"]
+              "value" : ["scalars", "hasReturned_0"]
             },
             {
               "type" : "expression",
@@ -556,8 +625,8 @@
           "id" : 1,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 123,
-            "column" : 42,
+            "line" : 130,
+            "column" : 2,
             "source_fragment" : "mark_dscp()"
           },
           "key" : [],
@@ -585,8 +654,8 @@
           "id" : 2,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 124,
-            "column" : 40,
+            "line" : 133,
+            "column" : 3,
             "source_fragment" : "drop()"
           },
           "key" : [],
@@ -598,9 +667,9 @@
           "direct_meters" : null,
           "action_ids" : [2],
           "actions" : ["MyIngress.drop"],
-          "base_default_next" : "tbl_basic124",
+          "base_default_next" : "tbl_basic134",
           "next_tables" : {
-            "MyIngress.drop" : "tbl_basic124"
+            "MyIngress.drop" : "tbl_basic134"
           },
           "default_entry" : {
             "action_id" : 2,
@@ -610,12 +679,12 @@
           }
         },
         {
-          "name" : "tbl_basic124",
+          "name" : "tbl_basic134",
           "id" : 3,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 124,
-            "column" : 48,
+            "line" : 134,
+            "column" : 3,
             "source_fragment" : "return"
           },
           "key" : [],
@@ -626,10 +695,10 @@
           "support_timeout" : false,
           "direct_meters" : null,
           "action_ids" : [6],
-          "actions" : ["basic124"],
+          "actions" : ["basic134"],
           "base_default_next" : "node_11",
           "next_tables" : {
-            "basic124" : "node_11"
+            "basic134" : "node_11"
           },
           "default_entry" : {
             "action_id" : 6,
@@ -643,8 +712,8 @@
           "id" : 4,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 125,
-            "column" : 41,
+            "line" : 137,
+            "column" : 3,
             "source_fragment" : "decrease_ttl()"
           },
           "key" : [],
@@ -672,7 +741,7 @@
           "id" : 5,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 108,
+            "line" : 113,
             "column" : 10,
             "source_fragment" : "ipv4_lpm"
           },
@@ -713,7 +782,7 @@
           "id" : 0,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 122,
+            "line" : 127,
             "column" : 12,
             "source_fragment" : "hdr.ipv4.isValid()"
           },
@@ -736,7 +805,7 @@
           "id" : 1,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 123,
+            "line" : 128,
             "column" : 16,
             "source_fragment" : "hdr.ipv4.protocol == 1"
           },
@@ -762,8 +831,8 @@
           "id" : 2,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 124,
-            "column" : 14,
+            "line" : 131,
+            "column" : 16,
             "source_fragment" : "hdr.ipv4.protocol == 6"
           },
           "expression" : {
@@ -788,8 +857,8 @@
           "id" : 3,
           "source_info" : {
             "filename" : "basic.p4",
-            "line" : 125,
-            "column" : 14,
+            "line" : 135,
+            "column" : 16,
             "source_fragment" : "hdr.ipv4.protocol == 17"
           },
           "expression" : {
@@ -819,7 +888,7 @@
               "left" : null,
               "right" : {
                 "type" : "field",
-                "value" : ["scalars", "hasReturned"]
+                "value" : ["scalars", "hasReturned_0"]
               }
             }
           },
@@ -833,7 +902,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "basic.p4",
-        "line" : 136,
+        "line" : 149,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },
@@ -849,7 +918,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "basic.p4",
-        "line" : 148,
+        "line" : 161,
         "column" : 8,
         "source_fragment" : "update_checksum( ..."
       },
